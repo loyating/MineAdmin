@@ -285,6 +285,10 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
                 // 对日期时间处理
                 if ($column->view_type == 'date' && $column->options['mode'] == 'date') {
                     unset($tmp['mode']);
+                    if (isset($column->options['range']) && $column->options['range']) {
+                        $tmp['formType'] = 'range';
+                        unset($tmp['range']);
+                    }
                 }
                 unset($tmp['collection']);
             }
@@ -415,7 +419,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
             'rate' => 'rate',
             'cascader' => 'cascader',
             'transfer' => 'transfer',
-            'selectUser' => 'user-select',
+            'selectUser' => 'select-user',
             'userInfo' => 'user-info',
             'cityLinkage' => 'city-linkage',
             'icon' => 'icon',
