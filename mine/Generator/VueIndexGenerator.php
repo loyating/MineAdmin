@@ -181,6 +181,12 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
         $options['pk'] = "'".$this->getPk()."'";
         $options['operationColumn'] = true;
         $options['operationWidth'] = 160;
+        $options['viewLayoutSetting'] = [
+            'layout' => "'auto'",
+            'cols' => 1,
+            'viewType' => $this->model->component_type == 1 ? "'modal'" : "'drawer'",
+            'width' => 600,
+        ];
         $options['api'] = $this->getBusinessEnName() . '.getList';
         if (Str::contains($this->model->generate_menus, 'recycle')) {
             $options['recycleApi'] = $this->getBusinessEnName() . '.getRecycleList';
@@ -200,7 +206,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
         if (Str::contains($this->model->generate_menus, 'delete')) {
             $options['delete'] = [
                 'show' => true,
-                'api' => $this->getBusinessEnName() . '.delete',
+                'api' => $this->getBusinessEnName() . '.deletes',
                 'auth' => "['".$this->getCode().":delete']"
             ];
             if (Str::contains($this->model->generate_menus, 'recycle')) {
@@ -279,6 +285,10 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
                 // 对日期时间处理
                 if ($column->view_type == 'date' && $column->options['mode'] == 'date') {
                     unset($tmp['mode']);
+                    if (isset($column->options['range']) && $column->options['range']) {
+                        $tmp['formType'] = 'range';
+                        unset($tmp['range']);
+                    }
                 }
                 unset($tmp['collection']);
             }
@@ -289,6 +299,10 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
                     'props' => [ 'label' => 'title', 'value' => 'key' ],
                     'translation' => true
                 ];
+            }
+            // 密码处理
+            if ($column->view_type == 'password') {
+                $tmp['type'] = 'password';
             }
             // 允许查看字段的角色（前端还待支持）
             // todo...
@@ -393,7 +407,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     {
         $viewTypes = [
             'text' => 'input',
-            'password' => 'password',
+            'password' => 'input',
             'textarea' => 'textarea',
             'inputNumber' => 'input-number',
             'inputTag' => 'input-tag',
@@ -409,7 +423,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
             'rate' => 'rate',
             'cascader' => 'cascader',
             'transfer' => 'transfer',
-            'selectUser' => 'user-select',
+            'selectUser' => 'select-user',
             'userInfo' => 'user-info',
             'cityLinkage' => 'city-linkage',
             'icon' => 'icon',
