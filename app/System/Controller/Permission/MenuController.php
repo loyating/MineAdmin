@@ -74,7 +74,8 @@ class MenuController extends MineController
     #[PostMapping("save"), Permission("system:menu:save"), OperationLog]
     public function save(SystemMenuRequest $request): ResponseInterface
     {
-        return $this->success(['id' => $this->service->save($request->all())]);
+        return $this->error('演示环境不允许新增菜单');
+//        return $this->success(['id' => $this->service->save($request->all())]);
     }
 
     /**
@@ -88,8 +89,9 @@ class MenuController extends MineController
     #[PutMapping("update/{id}"), Permission("system:menu:update"), OperationLog]
     public function update(int $id, SystemMenuRequest $request): ResponseInterface
     {
-        return $this->service->update($id, $request->all())
-            ? $this->success() : $this->error(t('mineadmin.data_no_change'));
+        return $this->error('演示环境不允许更新菜单');
+//        return $this->service->update($id, $request->all())
+//            ? $this->success() : $this->error(t('mineadmin.data_no_change'));
     }
 
     /**
@@ -101,7 +103,8 @@ class MenuController extends MineController
     #[DeleteMapping("delete"), Permission("system:menu:delete")]
     public function delete(): ResponseInterface
     {
-        return $this->service->delete((array) $this->request->input('ids', [])) ? $this->success() : $this->error();
+        return $this->error('演示环境不允许删除菜单');
+//        return $this->service->delete((array) $this->request->input('ids', [])) ? $this->success() : $this->error();
     }
 
     /**
@@ -113,10 +116,11 @@ class MenuController extends MineController
     #[DeleteMapping("realDelete"), Permission("system:menu:realDelete"), OperationLog]
     public function realDelete(): ResponseInterface
     {
-        $menus = $this->service->realDel((array) $this->request->input('ids', []));
-        return is_null($menus) ? 
-        $this->success() :
-        $this->success(t('system.exists_children_ctu', ['names' => implode(',', $menus)]));
+        return $this->error('演示环境不允许删除菜单');
+//        $menus = $this->service->realDel((array) $this->request->input('ids', []));
+//        return is_null($menus) ?
+//        $this->success() :
+//        $this->success(t('system.exists_children_ctu', ['names' => implode(',', $menus)]));
     }
 
     /**
@@ -128,7 +132,8 @@ class MenuController extends MineController
     #[PutMapping("recovery"), Permission("system:menu:recovery")]
     public function recovery(): ResponseInterface
     {
-        return $this->service->recovery((array) $this->request->input('ids', [])) ? $this->success() : $this->error();
+        return $this->error('演示环境不允许更新菜单');
+//        return $this->service->recovery((array) $this->request->input('ids', [])) ? $this->success() : $this->error();
     }
 
     /**
@@ -141,8 +146,9 @@ class MenuController extends MineController
     #[PutMapping("changeStatus"), Permission("system:menu:update"), OperationLog]
     public function changeStatus(SystemMenuRequest $request): ResponseInterface
     {
-        return $this->service->changeStatus((int) $this->request->input('id'), (string) $this->request->input('status'))
-            ? $this->success() : $this->error();
+        return $this->error('演示环境不允许更新菜单');
+//        return $this->service->changeStatus((int) $this->request->input('id'), (string) $this->request->input('status'))
+//            ? $this->success() : $this->error();
     }
 
     /**
@@ -154,10 +160,11 @@ class MenuController extends MineController
     #[PutMapping("numberOperation"), Permission("system:menu:update"), OperationLog]
     public function numberOperation(): ResponseInterface
     {
-        return $this->service->numberOperation(
-            (int) $this->request->input('id'),
-            (string) $this->request->input('numberName'),
-            (int) $this->request->input('numberValue', 1),
-        ) ? $this->success() : $this->error();
+        return $this->error('演示环境不允许更新菜单');
+//        return $this->service->numberOperation(
+//            (int) $this->request->input('id'),
+//            (string) $this->request->input('numberName'),
+//            (int) $this->request->input('numberValue', 1),
+//        ) ? $this->success() : $this->error();
     }
 }
