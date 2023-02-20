@@ -131,7 +131,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     {
         return [
             '{CODE}',
-            '{CRUD}',
+            '{OPTIONS}',
             '{COLUMNS}',
             '{BUSINESS_EN_NAME}',
             '{INPUT_NUMBER}',
@@ -149,7 +149,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     {
         return [
             $this->getCode(),
-            $this->getCrud(),
+            $this->getOptions(),
             $this->getColumns(),
             $this->getBusinessEnName(),
             $this->getInputNumber(),
@@ -172,7 +172,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
      * 获取CRUD配置代码
      * @return string
      */
-    protected function getCrud(): string
+    protected function getOptions(): string
     {
         // 配置项
         $options = [];
@@ -181,9 +181,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
         $options['pk'] = "'".$this->getPk()."'";
         $options['operationColumn'] = false;
         $options['operationWidth'] = 160;
-        $options['viewLayoutSetting'] = [
-            'layout' => "'auto'",
-            'cols' => 1,
+        $options['formOption'] = [
             'viewType' => $this->model->component_type == 1 ? "'modal'" : "'drawer'",
             'width' => 600,
         ];
@@ -239,7 +237,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
                 'auth' => "['".$this->getCode().":export']"
             ];
         }
-        return 'const crud = reactive(' . $this->jsonFormat($options, true) . ')';
+        return 'const options = reactive(' . $this->jsonFormat($options, true) . ')';
     }
 
     /**
@@ -270,7 +268,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
                 $tmp['hide'] = true;
             }
             if ($column->is_required == self::YES) {
-                $tmp['rules'] = [
+                $tmp['commonRules'] = [
                     'required' => true,
                     'message' => '请输入' . $column->column_comment
                 ];
@@ -283,7 +281,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
             }
             // 扩展项
             if (!empty($column->options)) {
-                $collection = $column->options['collection'];
+                $collection = $column->options['collection'] ?? [];
                 // 合并
                 $tmp = array_merge($tmp, $column->options);
                 // 自定义数据
