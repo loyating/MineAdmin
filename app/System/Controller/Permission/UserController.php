@@ -202,7 +202,8 @@ class UserController extends MineController
     #[PostMapping("modifyPassword")]
     public function modifyPassword(SystemUserRequest $request): ResponseInterface
     {
-        return $this->service->modifyPassword($request->validated()) ? $this->success() : $this->error();
+        return $this->error('演示站不可修改密码');
+        //return $this->service->modifyPassword($request->validated()) ? $this->success() : $this->error();
     }
 
     /**
